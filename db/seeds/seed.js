@@ -1,165 +1,126 @@
 const db = require("../connection");
 const format = require("pg-format");
-const { convertTimestampToDate, getArticleID } = require("./utils");
+const { convertTimestampToDate, createLookupMap } = require("./utils");
 
 const seed = ({ topicData, userData, articleData, commentData }) => {
-  // drop tables in reverse order from the way they were set up (?)
-  return db.query(`DROP TABLE IF EXISTS comments;`).then(() => {
-    return db.query(`DROP TABLE IF EXISTS articles;`).then(() => {
-      return db.query(`DROP TABLE IF EXISTS users;`).then(() => {
-        return db.query(`DROP TABLE IF EXISTS topics;`).then(() => {
-          return db
-            .query(
-              `CREATE TABLE topics (
-              slug VARCHAR(128) PRIMARY KEY, 
-              description VARCHAR(64), 
-              img_url VARCHAR(1000)
-              );`
-            )
-            .then(() => {
-              return db
-                .query(
-                  `CREATE TABLE users (
-                  username VARCHAR(128) PRIMARY KEY, 
-                  name VARCHAR(128) NOT NULL, 
-                  avatar_url VARCHAR(1000)
-                  );`
-                )
-                .then(() => {
-                  return db
-                    .query(
-                      `CREATE TABLE articles (
-                      article_id SERIAL PRIMARY KEY, 
-                      title VARCHAR(128) NOT NULL, 
-                      topic VARCHAR(128) REFERENCES topics(slug), 
-                      author VARCHAR(128) REFERENCES users(username), 
-                      body TEXT NOT NULL, 
-                      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-                      votes INT DEFAULT 0, 
-                      article_img_url VARCHAR(1000)
-                      );`
-                    )
-                    .then(() => {
-                      return db
-                        .query(
-                          `CREATE TABLE comments (
-                          comment_id SERIAL PRIMARY KEY,
-	                        article_id INTEGER REFERENCES articles(article_id) NOT NULL,
-	                        body TEXT NOT NULL,
-	                        votes INT DEFAULT 0,
-	                        author VARCHAR(128) REFERENCES users(username),
-	                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                          );`
-                        )
-                        .then(() => {
-                          const formattedTopicValues = topicData.map(
-                            ({ slug, description, img_url }) => {
-                              return [slug, description, img_url];
-                            }
-                          );
-                          const topicsInsertStr = format(
-                            `INSERT INTO topics(slug, description, img_url) VALUES %L RETURNING *`,
-                            formattedTopicValues
-                          );
-                          return db
-                            .query(topicsInsertStr)
-                            .then((topicsResults) => topicsResults.rows);
-                        })
-                        .then(() => {
-                          const formattedUserValues = userData.map(
-                            ({ username, name, avatar_url }) => {
-                              return [username, name, avatar_url];
-                            }
-                          );
-                          const usersInsertStr = format(
-                            `INSERT INTO users(username, name, avatar_url) VALUES %L RETURNING *`,
-                            formattedUserValues
-                          );
-                          return db
-                            .query(usersInsertStr)
-                            .then((usersResults) => usersResults.rows);
-                        })
-                        .then(() => {
-                          const timestampAdjustedArticleValues =
-                            articleData.map((article) =>
-                              convertTimestampToDate(article)
-                            );
-                          const formattedArticleValues =
-                            timestampAdjustedArticleValues.map(
-                              ({
-                                title,
-                                topic,
-                                author,
-                                body,
-                                created_at,
-                                votes,
-                                article_img_url,
-                              }) => {
-                                return [
-                                  title,
-                                  topic,
-                                  author,
-                                  body,
-                                  created_at,
-                                  votes,
-                                  article_img_url,
-                                ];
-                              }
-                            );
-                          const articlesInsertStr = format(
-                            `INSERT INTO articles(title, topic, author, body, created_at, votes, article_img_url) VALUES %L RETURNING *`,
-                            formattedArticleValues
-                          );
-                          return db
-                            .query(articlesInsertStr)
-                            .then((articlesResults) => articlesResults.rows);
-                        })
-                        .then(() => {
-                          const timestampAdjustedCommentValues =
-                            commentData.map((comment) =>
-                              convertTimestampToDate(comment)
-                            );
+  return (
+    db
+      .query(`DROP TABLE IF EXISTS comments;`)
+      .then(() => db.query(`DROP TABLE IF EXISTS articles;`))
+      .then(() => db.query(`DROP TABLE IF EXISTS users;`))
+      .then(() => db.query(`DROP TABLE IF EXISTS topics;`))
+      .then(() =>
+        db.query(
+          `CREATE TABLE topics (
+          slug VARCHAR(128) PRIMARY KEY, 
+          description VARCHAR(64), 
+          img_url VARCHAR(1000)
+        );`
+        )
+      )
+      .then(() =>
+        db.query(
+          `CREATE TABLE users (
+          username VARCHAR(128) PRIMARY KEY, 
+          name VARCHAR(128) NOT NULL, 
+          avatar_url VARCHAR(1000)
+        );`
+        )
+      )
+      .then(() =>
+        db.query(
+          `CREATE TABLE articles (
+          article_id SERIAL PRIMARY KEY, 
+          title VARCHAR(128) NOT NULL, 
+          topic VARCHAR(128) REFERENCES topics(slug), 
+          author VARCHAR(128) REFERENCES users(username), 
+          body TEXT NOT NULL, 
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+          votes INT DEFAULT 0, 
+          article_img_url VARCHAR(1000)
+        );`
+        )
+      )
+      .then(() =>
+        db.query(
+          `CREATE TABLE comments (
+          comment_id SERIAL PRIMARY KEY,
+          article_id INTEGER REFERENCES articles(article_id) NOT NULL,
+          body TEXT NOT NULL,
+          votes INT DEFAULT 0,
+          author VARCHAR(128) REFERENCES users(username),
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );`
+        )
+      )
 
-                          return Promise.all(
-                            timestampAdjustedCommentValues.map((comment) =>
-                              getArticleID(comment)
-                            )
-                          ).then((correctedComments) => {
-                            const formattedCommentValues =
-                              correctedComments.map(
-                                ({
-                                  article_id,
-                                  body,
-                                  votes,
-                                  author,
-                                  created_at,
-                                }) => {
-                                  return [
-                                    article_id,
-                                    body,
-                                    votes,
-                                    author,
-                                    created_at,
-                                  ];
-                                }
-                              );
+      // Insert Topics
+      .then(() => {
+        const topicInsertData = topicData.map(
+          ({ slug, description, img_url }) => [slug, description, img_url]
+        );
+        const insertTopicsQuery = format(
+          `INSERT INTO topics(slug, description, img_url) VALUES %L RETURNING *`,
+          topicInsertData
+        );
+        return db.query(insertTopicsQuery);
+      })
 
-                            const commentsInsertStr = format(
-                              `INSERT INTO comments(article_id, body, votes, author, created_at) VALUES %L RETURNING *`,
-                              formattedCommentValues
-                            );
+      // Insert Users
+      .then(() => {
+        const userInsertData = userData.map(
+          ({ username, name, avatar_url }) => [username, name, avatar_url]
+        );
+        const insertUsersQuery = format(
+          `INSERT INTO users(username, name, avatar_url) VALUES %L RETURNING *`,
+          userInsertData
+        );
+        return db.query(insertUsersQuery);
+      })
 
-                            return db
-                              .query(commentsInsertStr)
-                              .then((commentsResults) => commentsResults.rows);
-                          });
-                        });
-                    });
-                });
-            });
-        });
-      });
-    });
-  });
+      // Insert Articles
+      .then(() => {
+        const articlesWithDates = articleData.map(convertTimestampToDate);
+        const articleInsertData = articlesWithDates.map(
+          ({
+            title,
+            topic,
+            author,
+            body,
+            created_at,
+            votes,
+            article_img_url,
+          }) => [title, topic, author, body, created_at, votes, article_img_url]
+        );
+        const insertArticlesQuery = format(
+          `INSERT INTO articles(title, topic, author, body, created_at, votes, article_img_url) VALUES %L RETURNING *`,
+          articleInsertData
+        );
+        return db.query(insertArticlesQuery);
+      })
+
+      // Insert Comments
+      .then((insertedArticles) => {
+        const commentsWithDates = commentData.map(convertTimestampToDate);
+        const articleTitleToIdMap = createLookupMap(
+          insertedArticles.rows,
+          "title",
+          "article_id"
+        );
+        const commentInsertData = commentsWithDates.map(
+          ({ article_title, body, votes, author, created_at }) => {
+            const article_id = articleTitleToIdMap[article_title];
+            return [article_id, body, votes, author, created_at];
+          }
+        );
+        const insertCommentsQuery = format(
+          `INSERT INTO comments(article_id, body, votes, author, created_at) VALUES %L RETURNING *`,
+          commentInsertData
+        );
+        return db.query(insertCommentsQuery);
+      })
+      .then((insertedComments) => insertedComments.rows)
+  );
 };
+
 module.exports = seed;
