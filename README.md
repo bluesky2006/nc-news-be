@@ -11,3 +11,7 @@ In each of these files, add the following in order to connect to the databases:
 ```
 PGDATABASE=name_of_relevant_database
 ```
+
+# Database diagram
+
+![Database diagram](db_diagram.png)
