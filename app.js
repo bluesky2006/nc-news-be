@@ -1,7 +1,11 @@
 const express = require("express");
 const app = express();
-const db = require("./db/connection");
-const { getEndpoints, getAllTopics } = require("./controllers");
+
+const {
+  getEndpoints,
+  getAllTopics,
+  getAllArticles,
+} = require("./controllers/controllers");
 
 // Simple response at root level
 app.get("/", (request, response) => {
@@ -13,5 +17,8 @@ app.get("/api", getEndpoints);
 
 // Respond with list of topics on /api/topics
 app.get("/api/topics", getAllTopics);
+
+// Respond with list of articles on /api/articles
+app.get("/api/articles", getAllArticles);
 
 module.exports = app;
