@@ -71,3 +71,25 @@ describe("GET /api/articles", () => {
       });
   });
 });
+
+describe("GET /api/users", () => {
+  test("200: Responds with an object", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        expect(typeof body).toBe("object");
+      });
+  });
+  test("200: Responds with an object with a users key containing an array of desired objects", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        expect(Array.isArray(body.users)).toBe(true);
+        expect(typeof body.users[0].username).toBe("string");
+        expect(typeof body.users[0].name).toBe("string");
+        expect(typeof body.users[0].avatar_url).toBe("string");
+      });
+  });
+});

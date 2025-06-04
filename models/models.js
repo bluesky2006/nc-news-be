@@ -30,4 +30,10 @@ const fetchAllArticles = () => {
     });
 };
 
-module.exports = { fetchAllTopics, fetchAllArticles };
+const fetchAllUsers = () => {
+  return db.query("SELECT * FROM users;").then(({ rows }) => {
+    return { users: rows };
+  });
+};
+
+module.exports = { fetchAllTopics, fetchAllArticles, fetchAllUsers };

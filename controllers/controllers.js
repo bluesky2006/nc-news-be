@@ -1,5 +1,9 @@
 const endpoints = require("../endpoints.json");
-const { fetchAllTopics, fetchAllArticles } = require("../models/models");
+const {
+  fetchAllTopics,
+  fetchAllArticles,
+  fetchAllUsers,
+} = require("../models/models");
 
 const getEndpoints = (request, response) => {
   response.status(200).send({ endpoints: endpoints });
@@ -13,4 +17,8 @@ const getAllArticles = (request, response) => {
   fetchAllArticles().then((articles) => response.status(200).send(articles));
 };
 
-module.exports = { getEndpoints, getAllTopics, getAllArticles };
+const getAllUsers = (request, response) => {
+  fetchAllUsers().then((users) => response.status(200).send(users));
+};
+
+module.exports = { getEndpoints, getAllTopics, getAllArticles, getAllUsers };

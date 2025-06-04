@@ -5,6 +5,7 @@ const {
   getEndpoints,
   getAllTopics,
   getAllArticles,
+  getAllUsers,
 } = require("./controllers/controllers");
 
 // Simple response at root level
@@ -20,5 +21,8 @@ app.get("/api/topics", getAllTopics);
 
 // Respond with list of articles on /api/articles
 app.get("/api/articles", getAllArticles);
+
+// Respond with list of users on /api/users
+app.get("/api/users", getAllUsers);
 
 module.exports = app;
