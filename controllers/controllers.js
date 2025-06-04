@@ -3,6 +3,7 @@ const {
   fetchAllTopics,
   fetchAllArticles,
   fetchAllUsers,
+  fetchArticleByArticleId,
 } = require("../models/models");
 
 const getEndpoints = (request, response) => {
@@ -21,4 +22,17 @@ const getAllUsers = (request, response) => {
   fetchAllUsers().then((users) => response.status(200).send(users));
 };
 
-module.exports = { getEndpoints, getAllTopics, getAllArticles, getAllUsers };
+const getArticleByArticleId = (request, response) => {
+  const { article_id } = request.params;
+  fetchArticleByArticleId(article_id).then((article) =>
+    response.status(200).send(article)
+  );
+};
+
+module.exports = {
+  getEndpoints,
+  getAllTopics,
+  getAllArticles,
+  getAllUsers,
+  getArticleByArticleId,
+};

@@ -93,3 +93,29 @@ describe("GET /api/users", () => {
       });
   });
 });
+
+describe("GET /api/articles/:article_id", () => {
+  test("200: Responds with an object", () => {
+    return request(app)
+      .get("/api/articles/3")
+      .expect(200)
+      .then(({ body }) => {
+        expect(typeof body).toBe("object");
+      });
+  });
+  test("200: Responds with an object with an article key containing an array with the desired object", () => {
+    return request(app)
+      .get("/api/articles/3")
+      .expect(200)
+      .then(({ body }) => {
+        expect(Array.isArray(body.article)).toBe(true);
+        expect(typeof body.article[0].article_id).toBe("number");
+        expect(typeof body.article[0].title).toBe("string");
+        expect(typeof body.article[0].topic).toBe("string");
+        expect(typeof body.article[0].author).toBe("string");
+        expect(typeof body.article[0].created_at).toBe("string");
+        expect(typeof body.article[0].votes).toBe("number");
+        expect(typeof body.article[0].article_img_url).toBe("string");
+      });
+  });
+});
