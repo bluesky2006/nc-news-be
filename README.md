@@ -6,10 +6,14 @@ You will need to create two .env files in the root of the repo:
 
 `.env.test`
 
-In each of these files, add the following in order to connect to the databases:
+In these files, respectively, add the following in order to connect to the databases:
 
 ```
-PGDATABASE=name_of_relevant_database
+PGDATABASE=nc_news
+```
+
+```
+PGDATABASE=nc_news_test
 ```
 
 # Database diagram
