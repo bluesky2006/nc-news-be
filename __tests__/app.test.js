@@ -239,3 +239,56 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("202: Responds with an object", () => {
+    return request(app)
+      .patch("/api/articles/3")
+      .send({
+        inc_votes: 1,
+      })
+      .expect(202)
+      .then(({ body }) => {
+        expect(typeof body).toBe("object");
+      });
+  });
+  test("202: Responds with a full article object", () => {
+    return request(app)
+      .patch("/api/articles/3")
+      .send({
+        inc_votes: 1,
+      })
+      .expect(202)
+      .then(({ body }) => {
+        expect(Array.isArray(body.article)).toBe(true);
+        expect(body.article[0].article_id).toBe(3);
+        expect(typeof body.article[0].title).toBe("string");
+        expect(typeof body.article[0].topic).toBe("string");
+        expect(typeof body.article[0].author).toBe("string");
+        expect(typeof body.article[0].created_at).toBe("string");
+        expect(typeof body.article[0].votes).toBe("number");
+        expect(typeof body.article[0].article_img_url).toBe("string");
+      });
+  });
+  test("202: Responds with a full article object with the vote property correctly updated", () => {
+    return db
+      .query(
+        `SELECT votes 
+        FROM articles 
+        WHERE article_id = 3;`
+      )
+      .then((beforePatch) => {
+        return request(app)
+          .patch("/api/articles/3")
+          .send({
+            inc_votes: 1,
+          })
+          .expect(202)
+          .then(({ body }) => {
+            expect(body.article[0].votes).toBe(beforePatch.rows[0].votes + 1);
+          });
+      });
+  });
+});
+
+// Add error tests to "GET /api/articles/:article_id/comments"

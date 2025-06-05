@@ -7,7 +7,6 @@ exports.convertTimestampToDate = ({ created_at, ...otherProperties }) => {
 
 exports.createLookupMap = (array, key, value) => {
   if (array.length === 0) return {};
-
   return array.reduce((result, currentObject) => {
     result[currentObject[key]] = currentObject[value];
     return result;

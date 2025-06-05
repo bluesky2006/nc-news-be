@@ -1,6 +1,6 @@
 const db = require("../db/connection");
 
-const fetchAllArticles = () => {
+const selectAllArticles = () => {
   return db
     .query(
       `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id)
@@ -23,9 +23,14 @@ const fetchAllArticles = () => {
     });
 };
 
-const fetchArticleByArticleId = (article_id) => {
+const selectArticleByArticleId = (article_id) => {
   return db
-    .query("SELECT * FROM articles WHERE article_id = $1;", [article_id])
+    .query(
+      `SELECT *
+      FROM articles
+      WHERE article_id = $1;`,
+      [article_id]
+    )
     .then(({ rows }) => {
       if (rows.length === 0) {
         return Promise.reject({ status: 404, msg: "Not Found" });
@@ -34,4 +39,25 @@ const fetchArticleByArticleId = (article_id) => {
     });
 };
 
-module.exports = { fetchAllArticles, fetchArticleByArticleId };
+const updateArticleVoteByArticleId = (article_id, inc_votes) => {
+  return db
+    .query(
+      `UPDATE articles
+      SET votes = votes + $1
+      WHERE article_id = $2
+      RETURNING *;`,
+      [inc_votes, article_id]
+    )
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "Not Found" });
+      }
+      return { article: rows };
+    });
+};
+
+module.exports = {
+  selectAllArticles,
+  selectArticleByArticleId,
+  updateArticleVoteByArticleId,
+};

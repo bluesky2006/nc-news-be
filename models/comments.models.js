@@ -1,6 +1,6 @@
 const db = require("../db/connection");
 
-const fetchCommentsByArticleId = (article_id) => {
+const selectCommentsByArticleId = (article_id) => {
   return db
     .query(
       `SELECT comments.comment_id, comments.votes, comments.created_at, comments.author, comments.body, comments.article_id 
@@ -16,7 +16,7 @@ const fetchCommentsByArticleId = (article_id) => {
     });
 };
 
-const pushCommentByArticleId = (article_id, author, body) => {
+const insertCommentByArticleId = (article_id, author, body) => {
   return db
     .query(
       `INSERT INTO comments (article_id, author, body)
@@ -29,4 +29,4 @@ const pushCommentByArticleId = (article_id, author, body) => {
     });
 };
 
-module.exports = { fetchCommentsByArticleId, pushCommentByArticleId };
+module.exports = { selectCommentsByArticleId, insertCommentByArticleId };
