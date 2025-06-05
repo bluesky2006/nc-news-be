@@ -1,13 +1,18 @@
 const express = require("express");
 const app = express();
-
+const {
+  handlePostgresErrors,
+  handleCustomErrors,
+  handleServerError,
+} = require("./error_handling/api.errors");
 const {
   getEndpoints,
   getAllTopics,
   getAllArticles,
   getAllUsers,
   getArticleByArticleId,
-} = require("./controllers/controllers");
+  getCommentsByArticleId,
+} = require("./controllers/api.controllers");
 
 // Simple response at root level
 app.get("/", (request, response) => {
@@ -28,5 +33,14 @@ app.get("/api/users", getAllUsers);
 
 // Respond with a specific article on /api/articles/:article_id
 app.get("/api/articles/:article_id", getArticleByArticleId);
+
+// Respond with all comments related to an article_id on /api/articles/:article_id/comments
+app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
+
+app.use(handlePostgresErrors);
+
+app.use(handleCustomErrors);
+
+app.use(handleServerError);
 
 module.exports = app;

@@ -10,7 +10,7 @@ const fetchAllTopics = () => {
 const fetchAllArticles = () => {
   return db
     .query(
-      `SELECT articles.*, COUNT(comments.comment_id)
+      `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id)
       AS comment_count
       FROM articles
       LEFT JOIN comments
@@ -19,7 +19,7 @@ const fetchAllArticles = () => {
       ORDER BY articles.created_at DESC;`
     )
     .then(({ rows }) => {
-      const filteredArticles = rows.map(({ body, comment_count, ...rest }) => {
+      const filteredArticles = rows.map(({ comment_count, ...rest }) => {
         return {
           ...rest,
           comment_count: Number(comment_count),
@@ -40,7 +40,26 @@ const fetchArticleByArticleId = (article_id) => {
   return db
     .query("SELECT * FROM articles WHERE article_id = $1;", [article_id])
     .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "Not Found" });
+      }
       return { article: rows };
+    });
+};
+
+const fetchCommentsByArticleId = (article_id) => {
+  return db
+    .query(
+      `SELECT comments.comment_id, comments.votes, comments.created_at, comments.author, comments.body, comments.article_id 
+      FROM comments 
+      LEFT JOIN articles 
+      ON comments.article_id = articles.article_id
+      WHERE articles.article_id = $1
+      ORDER BY comments.created_at DESC;`,
+      [article_id]
+    )
+    .then(({ rows }) => {
+      return { comments: rows };
     });
 };
 
@@ -49,4 +68,5 @@ module.exports = {
   fetchAllArticles,
   fetchAllUsers,
   fetchArticleByArticleId,
+  fetchCommentsByArticleId,
 };

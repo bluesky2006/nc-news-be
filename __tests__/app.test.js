@@ -109,13 +109,54 @@ describe("GET /api/articles/:article_id", () => {
       .expect(200)
       .then(({ body }) => {
         expect(Array.isArray(body.article)).toBe(true);
-        expect(typeof body.article[0].article_id).toBe("number");
+        expect(body.article[0].article_id).toBe(3);
         expect(typeof body.article[0].title).toBe("string");
         expect(typeof body.article[0].topic).toBe("string");
         expect(typeof body.article[0].author).toBe("string");
         expect(typeof body.article[0].created_at).toBe("string");
         expect(typeof body.article[0].votes).toBe("number");
         expect(typeof body.article[0].article_img_url).toBe("string");
+      });
+  });
+  test("400: Responds with an error if the article_id is not a number", () => {
+    return request(app)
+      .get("/api/articles/notanum")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
+  test("404: Responds with an error if the article_id does not exist", () => {
+    return request(app)
+      .get("/api/articles/99")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Not Found");
+      });
+  });
+});
+
+describe("GET /api/articles/:article_id/comments", () => {
+  test("200: Responds with an object", () => {
+    return request(app)
+      .get("/api/articles/3/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(typeof body).toBe("object");
+      });
+  });
+  test("200: Responds with an object with a comments key containing an array with the desired object", () => {
+    return request(app)
+      .get("/api/articles/3/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(Array.isArray(body.comments)).toBe(true);
+        expect(typeof body.comments[0].comment_id).toBe("number");
+        expect(typeof body.comments[0].votes).toBe("number");
+        expect(typeof body.comments[0].created_at).toBe("string");
+        expect(typeof body.comments[0].author).toBe("string");
+        expect(typeof body.comments[0].body).toBe("string");
+        expect(body.comments[0].article_id).toBe(3);
       });
   });
 });
