@@ -183,13 +183,13 @@ describe("POST /api/articles/:article_id/comments", () => {
         body: "this is a test",
       })
       .then(({ body }) => {
-        expect(typeof body).toBe("object");
-        expect(typeof body.comment[0].comment_id).toBe("number");
-        expect(typeof body.comment[0].votes).toBe("number");
-        expect(typeof body.comment[0].created_at).toBe("string");
-        expect(typeof body.comment[0].author).toBe("string");
-        expect(typeof body.comment[0].body).toBe("string");
-        expect(body.comment[0].article_id).toBe(3);
+        expect(typeof body.comment).toBe("object");
+        expect(typeof body.comment.comment_id).toBe("number");
+        expect(typeof body.comment.votes).toBe("number");
+        expect(typeof body.comment.created_at).toBe("string");
+        expect(typeof body.comment.author).toBe("string");
+        expect(typeof body.comment.body).toBe("string");
+        expect(body.comment.article_id).toBe(3);
       });
   });
   test("400: Responds with an error if the user does not exist", () => {

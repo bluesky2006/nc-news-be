@@ -72,7 +72,7 @@ const pushCommentByArticleId = (article_id, author, body) => {
       [article_id, author, body]
     )
     .then(({ rows }) => {
-      return { comment: rows };
+      return { comment: rows[0] };
     });
 };
 

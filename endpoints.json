@@ -98,5 +98,25 @@
         }
       ]
     }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "Returns newly posted comment on a given article_id number.",
+    "queries": [],
+    "requestBody": {
+      "author": "tickle122",
+      "body": "this is a test"
+    },
+    "exampleResponse": {
+      "comment": [
+        {
+          "comment_id": 314,
+          "article_id": 3,
+          "body": "this is a test",
+          "votes": 0,
+          "author": "tickle122",
+          "created_at": "2025-06-05T11:28:43.842Z"
+        }
+      ]
+    }
   }
 }
