@@ -4,16 +4,18 @@ const {
   handlePostgresErrors,
   handleCustomErrors,
   handleServerError,
-} = require("./error_handling/api.errors");
+} = require("./middleware/error-handler");
+const { getEndpoints } = require("./controllers/api.controllers");
 const {
-  getEndpoints,
-  getAllTopics,
   getAllArticles,
-  getAllUsers,
   getArticleByArticleId,
+} = require("./controllers/articles.controllers");
+const {
   getCommentsByArticleId,
   postCommentByArticleId,
-} = require("./controllers/api.controllers");
+} = require("./controllers/comments.controllers");
+const { getAllTopics } = require("./controllers/topics.controllers");
+const { getAllUsers } = require("./controllers/users.controllers");
 
 app.use(express.json());
 

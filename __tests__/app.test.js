@@ -43,6 +43,7 @@ describe("GET /api/topics", () => {
         expect(typeof body.topics[0].description).toBe("string");
       });
   });
+  test("200: Returned object does not contain an img_url", () => {});
 });
 
 describe("GET /api/articles", () => {
@@ -70,6 +71,8 @@ describe("GET /api/articles", () => {
         expect(typeof body.articles[0].comment_count).toBe("number");
       });
   });
+  test("200: Returned articles sorted by date in descending order", () => {});
+  test("200: Returned object does not contain a body key", () => {});
 });
 
 describe("GET /api/users", () => {
@@ -159,6 +162,7 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(body.comments.article_id).toBe(3);
       });
   });
+  test("200: Returned comments sorted by date in descending order", () => {});
 });
 
 describe("POST /api/articles/:article_id/comments", () => {
@@ -205,3 +209,13 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+/* Add tests:
+  -/api/articles:
+    - articles are sorted by date in descending order
+    - no body present
+  -/api/articles/:article_id/comments:
+    - comments sorted with most recent first
+  -/api/topics
+    - no img_url present
+    */
