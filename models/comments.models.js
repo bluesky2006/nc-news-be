@@ -12,7 +12,7 @@ const fetchCommentsByArticleId = (article_id) => {
       [article_id]
     )
     .then(({ rows }) => {
-      return { comments: rows[0] };
+      return { comments: rows };
     });
 };
 

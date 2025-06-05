@@ -4,6 +4,7 @@ const data = require("../db/data/test-data");
 const request = require("supertest");
 const app = require("../app");
 const endpointsJson = require("../endpoints.json");
+require("jest-sorted");
 
 beforeEach(() => {
   return seed(data);
@@ -43,7 +44,14 @@ describe("GET /api/topics", () => {
         expect(typeof body.topics[0].description).toBe("string");
       });
   });
-  test("200: Returned object does not contain an img_url", () => {});
+  test("200: Returned object does not contain an img_url", () => {
+    return request(app)
+      .get("/api/topics")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.topics[0].hasOwnProperty("img_url")).toBe(false);
+      });
+  });
 });
 
 describe("GET /api/articles", () => {
@@ -71,8 +79,22 @@ describe("GET /api/articles", () => {
         expect(typeof body.articles[0].comment_count).toBe("number");
       });
   });
-  test("200: Returned articles sorted by date in descending order", () => {});
-  test("200: Returned object does not contain a body key", () => {});
+  test("200: Returned articles sorted by date in descending order", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+  test("200: Returned object does not contain a body key", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles[0].hasOwnProperty("body")).toBe(false);
+      });
+  });
 });
 
 describe("GET /api/users", () => {
@@ -154,15 +176,23 @@ describe("GET /api/articles/:article_id/comments", () => {
       .expect(200)
       .then(({ body }) => {
         expect(typeof body).toBe("object");
-        expect(typeof body.comments.comment_id).toBe("number");
-        expect(typeof body.comments.votes).toBe("number");
-        expect(typeof body.comments.created_at).toBe("string");
-        expect(typeof body.comments.author).toBe("string");
-        expect(typeof body.comments.body).toBe("string");
-        expect(body.comments.article_id).toBe(3);
+        expect(typeof body.comments[0].comment_id).toBe("number");
+        expect(typeof body.comments[0].votes).toBe("number");
+        expect(typeof body.comments[0].created_at).toBe("string");
+        expect(typeof body.comments[0].author).toBe("string");
+        expect(typeof body.comments[0].body).toBe("string");
+        expect(body.comments[0].article_id).toBe(3);
       });
   });
-  test("200: Returned comments sorted by date in descending order", () => {});
+  test("200: Returned comments sorted by date in descending order", () => {
+    return request(app)
+      .get("/api/articles/3/comments")
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body.comments);
+        expect(body.comments).toBeSortedBy("created_at", { descending: true });
+      });
+  });
 });
 
 describe("POST /api/articles/:article_id/comments", () => {
@@ -209,13 +239,3 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 });
-
-/* Add tests:
-  -/api/articles:
-    - articles are sorted by date in descending order
-    - no body present
-  -/api/articles/:article_id/comments:
-    - comments sorted with most recent first
-  -/api/topics
-    - no img_url present
-    */
