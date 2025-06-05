@@ -14,6 +14,7 @@ const {
 const {
   getCommentsByArticleId,
   postCommentByArticleId,
+  deleteCommentByCommentId,
 } = require("./controllers/comments.controllers");
 const { getAllTopics } = require("./controllers/topics.controllers");
 const { getAllUsers } = require("./controllers/users.controllers");
@@ -46,6 +47,9 @@ app.post("/api/articles/:article_id/comments", postCommentByArticleId);
 
 // Patches an article's vote property by article_id on /api/articles/:article_id
 app.patch("/api/articles/:article_id", patchArticleVoteByArticleId);
+
+// Deletes a comment by its comment_id on /api/comments/:comment_id
+app.delete("/api/comments/:comment_id", deleteCommentByCommentId);
 
 app.use(handlePostgresErrors);
 

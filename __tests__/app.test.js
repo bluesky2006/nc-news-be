@@ -291,4 +291,5 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 });
 
+// Need to add tests for DELETE /api/comments/:comment_id
 // Add error tests to "GET /api/articles/:article_id/comments"
