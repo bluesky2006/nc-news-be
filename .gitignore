@@ -1,6 +1,6 @@
 node_modules
 .env.*
-output_dev.txt
-output_test.txt
-output_nc_news_test.sql
-output_nc_news.sql
+.output_dev.txt
+.output_test.txt
+.output_nc_news_test.sql
+.output_nc_news.sql
