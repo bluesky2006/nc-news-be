@@ -5,6 +5,7 @@ const {
   fetchAllUsers,
   fetchArticleByArticleId,
   fetchCommentsByArticleId,
+  pushCommentByArticleId,
 } = require("../models/api.models");
 
 const getEndpoints = (request, response) => {
@@ -37,6 +38,14 @@ const getCommentsByArticleId = (request, response) => {
   );
 };
 
+const postCommentByArticleId = (request, response, next) => {
+  const { article_id } = request.params;
+  const { author, body } = request.body;
+  pushCommentByArticleId(article_id, author, body)
+    .then((comment) => response.status(201).send(comment))
+    .catch(next);
+};
+
 module.exports = {
   getEndpoints,
   getAllTopics,
@@ -44,4 +53,5 @@ module.exports = {
   getAllUsers,
   getArticleByArticleId,
   getCommentsByArticleId,
+  postCommentByArticleId,
 };

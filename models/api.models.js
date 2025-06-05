@@ -59,7 +59,20 @@ const fetchCommentsByArticleId = (article_id) => {
       [article_id]
     )
     .then(({ rows }) => {
-      return { comments: rows };
+      return { comments: rows[0] };
+    });
+};
+
+const pushCommentByArticleId = (article_id, author, body) => {
+  return db
+    .query(
+      `INSERT INTO comments (article_id, author, body)
+      VALUES ($1, $2, $3)
+      RETURNING *;`,
+      [article_id, author, body]
+    )
+    .then(({ rows }) => {
+      return { comment: rows };
     });
 };
 
@@ -69,4 +82,5 @@ module.exports = {
   fetchAllUsers,
   fetchArticleByArticleId,
   fetchCommentsByArticleId,
+  pushCommentByArticleId,
 };

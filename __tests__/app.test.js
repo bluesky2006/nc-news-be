@@ -150,13 +150,58 @@ describe("GET /api/articles/:article_id/comments", () => {
       .get("/api/articles/3/comments")
       .expect(200)
       .then(({ body }) => {
-        expect(Array.isArray(body.comments)).toBe(true);
-        expect(typeof body.comments[0].comment_id).toBe("number");
-        expect(typeof body.comments[0].votes).toBe("number");
-        expect(typeof body.comments[0].created_at).toBe("string");
-        expect(typeof body.comments[0].author).toBe("string");
-        expect(typeof body.comments[0].body).toBe("string");
-        expect(body.comments[0].article_id).toBe(3);
+        expect(typeof body).toBe("object");
+        expect(typeof body.comments.comment_id).toBe("number");
+        expect(typeof body.comments.votes).toBe("number");
+        expect(typeof body.comments.created_at).toBe("string");
+        expect(typeof body.comments.author).toBe("string");
+        expect(typeof body.comments.body).toBe("string");
+        expect(body.comments.article_id).toBe(3);
+      });
+  });
+});
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: Responds with an object", () => {
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send({
+        author: "rogersop",
+        body: "this is a test",
+      })
+      .expect(201)
+      .then(({ body }) => {
+        expect(typeof body).toBe("object");
+      });
+  });
+  test("201: Responds with the posted comment object", () => {
+    return request(app)
+      .post("/api/articles/3/comments")
+      .expect(201)
+      .send({
+        author: "rogersop",
+        body: "this is a test",
+      })
+      .then(({ body }) => {
+        expect(typeof body).toBe("object");
+        expect(typeof body.comment[0].comment_id).toBe("number");
+        expect(typeof body.comment[0].votes).toBe("number");
+        expect(typeof body.comment[0].created_at).toBe("string");
+        expect(typeof body.comment[0].author).toBe("string");
+        expect(typeof body.comment[0].body).toBe("string");
+        expect(body.comment[0].article_id).toBe(3);
+      });
+  });
+  test("400: Responds with an error if the user does not exist", () => {
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send({
+        author: "bluesky2006",
+        body: "this is a test",
+      })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body).toEqual({ msg: "Bad Request" });
       });
   });
 });

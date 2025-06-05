@@ -12,7 +12,10 @@ const {
   getAllUsers,
   getArticleByArticleId,
   getCommentsByArticleId,
+  postCommentByArticleId,
 } = require("./controllers/api.controllers");
+
+app.use(express.json());
 
 // Simple response at root level
 app.get("/", (request, response) => {
@@ -36,6 +39,9 @@ app.get("/api/articles/:article_id", getArticleByArticleId);
 
 // Respond with all comments related to an article_id on /api/articles/:article_id/comments
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
+
+// Posts a comment related to an article_id on /api/articles/:article_id/comments
+app.post("/api/articles/:article_id/comments", postCommentByArticleId);
 
 app.use(handlePostgresErrors);
 
