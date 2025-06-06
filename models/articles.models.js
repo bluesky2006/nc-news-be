@@ -1,6 +1,23 @@
 const db = require("../db/connection");
 
-const selectAllArticles = () => {
+const selectAllArticles = (sort_by = "created_at", order = "desc") => {
+  const validSortByQueries = [
+    "author",
+    "title",
+    "article_id",
+    "topic",
+    "created_at",
+    "votes",
+    "article_img_url",
+  ];
+  const validOrderQueries = ["asc", "desc"];
+  if (sort_by && !validSortByQueries.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: "Invalid sort_by query" });
+  }
+  if (order && !validOrderQueries.includes(order)) {
+    return Promise.reject({ status: 400, msg: "Invalid order query" });
+  }
+
   return db
     .query(
       `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id)
@@ -9,7 +26,7 @@ const selectAllArticles = () => {
       LEFT JOIN comments
       ON comments.article_id = articles.article_id
       GROUP BY articles.article_id
-      ORDER BY articles.created_at DESC;`
+      ORDER BY articles.${sort_by} ${order.toUpperCase()};`
     )
     .then(({ rows }) => {
       const filteredArticles = rows.map(({ comment_count, ...rest }) => {

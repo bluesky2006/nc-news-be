@@ -255,8 +255,6 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 });
 
-// Add error tests
-
 describe("PATCH /api/articles/:article_id", () => {
   test("202: Responds with an object", () => {
     return request(app)
