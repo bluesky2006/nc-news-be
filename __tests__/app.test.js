@@ -255,6 +255,8 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 });
 
+// Add error tests
+
 describe("PATCH /api/articles/:article_id", () => {
   test("202: Responds with an object", () => {
     return request(app)
@@ -298,5 +300,50 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 });
 
-// Need to add tests for DELETE /api/comments/:comment_id
-
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: Responds with no body content", () => {
+    return request(app)
+      .delete("/api/comments/3")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({});
+      });
+  });
+  test("204: Deletes the relevant comment", () => {
+    return request(app)
+      .delete("/api/comments/3")
+      .expect(204)
+      .then(() => {
+        return request(app).get("/api/comments/3").expect(404);
+      });
+  });
+  test("400: Responds with error if comment_id type is invalid", () => {
+    return request(app)
+      .delete("/api/comments/notanum")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
+  test("404: Responds with error if comment_id is valid but no comment exists", () => {
+    return request(app)
+      .delete("/api/comments/99")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Not Found");
+      });
+  });
+  test("404: Responds with error if attempting to to delete the same comment twice", () => {
+    return request(app)
+      .delete("/api/comments/3")
+      .expect(204)
+      .then(() => {
+        return request(app)
+          .delete("/api/comments/3")
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).toBe("Not Found");
+          });
+      });
+  });
+});
