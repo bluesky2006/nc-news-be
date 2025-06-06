@@ -4,11 +4,11 @@ const {
   dBdeleteCommentByCommentId,
 } = require("../models/comments.models.js");
 
-const getCommentsByArticleId = (request, response) => {
+const getCommentsByArticleId = (request, response, next) => {
   const { article_id } = request.params;
-  selectCommentsByArticleId(article_id).then((comments) =>
-    response.status(200).send(comments)
-  );
+  selectCommentsByArticleId(article_id)
+    .then((comments) => response.status(200).send(comments))
+    .catch(next);
 };
 
 const postCommentByArticleId = (request, response, next) => {

@@ -189,8 +189,23 @@ describe("GET /api/articles/:article_id/comments", () => {
       .get("/api/articles/3/comments")
       .expect(200)
       .then(({ body }) => {
-        console.log(body.comments);
         expect(body.comments).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+  test("400: Responds with an error if the article_id is not a number", () => {
+    return request(app)
+      .get("/api/articles/notanum/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
+  test("404: Responds with an error if the article_id does not exist", () => {
+    return request(app)
+      .get("/api/articles/99/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Not Found");
       });
   });
 });
@@ -271,25 +286,17 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
   test("202: Responds with a full article object with the vote property correctly updated", () => {
-    return db
-      .query(
-        `SELECT votes 
-        FROM articles 
-        WHERE article_id = 3;`
-      )
-      .then((beforePatch) => {
-        return request(app)
-          .patch("/api/articles/3")
-          .send({
-            inc_votes: 1,
-          })
-          .expect(202)
-          .then(({ body }) => {
-            expect(body.article[0].votes).toBe(beforePatch.rows[0].votes + 1);
-          });
+    return request(app)
+      .patch("/api/articles/3")
+      .send({
+        inc_votes: -567,
+      })
+      .expect(202)
+      .then(({ body }) => {
+        expect(body.article[0].votes).toBe(-567);
       });
   });
 });
 
 // Need to add tests for DELETE /api/comments/:comment_id
-// Add error tests to "GET /api/articles/:article_id/comments"
+
