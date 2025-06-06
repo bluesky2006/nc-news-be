@@ -1,6 +1,7 @@
 const db = require("../db/connection");
+const checkTopicExists = require("../utils");
 
-const selectAllArticles = (sort_by = "created_at", order = "desc") => {
+const selectAllArticles = (sort_by = "created_at", order = "desc", topic) => {
   const validSortByQueries = [
     "author",
     "title",
@@ -13,32 +14,33 @@ const selectAllArticles = (sort_by = "created_at", order = "desc") => {
   const validOrderQueries = ["asc", "desc"];
 
   if (
-    !validSortByQueries.includes(sort_by) &&
+    !validSortByQueries.includes(sort_by) ||
     !validOrderQueries.includes(order)
   ) {
-    return Promise.reject({ status: 400, msg: "Invalid queries" });
+    return Promise.reject({ status: 400, msg: "Invalid query" });
   }
 
-  if (!validSortByQueries.includes(sort_by)) {
-    return Promise.reject({ status: 400, msg: "Invalid sort_by query" });
-  }
-  if (!validOrderQueries.includes(order)) {
-    return Promise.reject({ status: 400, msg: "Invalid order query" });
+  const queryValues = [];
+  let queryString = `SELECT articles.*, COUNT(comments.comment_id)
+      AS comment_count
+      FROM articles
+      LEFT JOIN comments
+      ON comments.article_id = articles.article_id `;
+
+  if (topic) {
+    queryValues.push(topic);
+    queryString += `WHERE articles.topic = $1 `;
   }
 
   return db
     .query(
-      `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id)
-      AS comment_count
-      FROM articles
-      LEFT JOIN comments
-      ON comments.article_id = articles.article_id
-      GROUP BY articles.article_id
-      ORDER BY articles.${sort_by} ${order.toUpperCase()};`
+      (queryString += `GROUP BY articles.article_id
+    ORDER BY articles.${sort_by} ${order.toUpperCase()};`),
+      queryValues
     )
     .then(({ rows }) => {
       const articlesWithCommentCount = rows.map(
-        ({ comment_count, ...rest }) => {
+        ({ comment_count, body, ...rest }) => {
           return {
             ...rest,
             comment_count: Number(comment_count),
