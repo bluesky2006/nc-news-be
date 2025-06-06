@@ -11,10 +11,18 @@ const selectAllArticles = (sort_by = "created_at", order = "desc") => {
     "article_img_url",
   ];
   const validOrderQueries = ["asc", "desc"];
-  if (sort_by && !validSortByQueries.includes(sort_by)) {
+
+  if (
+    !validSortByQueries.includes(sort_by) &&
+    !validOrderQueries.includes(order)
+  ) {
+    return Promise.reject({ status: 400, msg: "Invalid queries" });
+  }
+
+  if (!validSortByQueries.includes(sort_by)) {
     return Promise.reject({ status: 400, msg: "Invalid sort_by query" });
   }
-  if (order && !validOrderQueries.includes(order)) {
+  if (!validOrderQueries.includes(order)) {
     return Promise.reject({ status: 400, msg: "Invalid order query" });
   }
 
@@ -29,14 +37,16 @@ const selectAllArticles = (sort_by = "created_at", order = "desc") => {
       ORDER BY articles.${sort_by} ${order.toUpperCase()};`
     )
     .then(({ rows }) => {
-      const filteredArticles = rows.map(({ comment_count, ...rest }) => {
-        return {
-          ...rest,
-          comment_count: Number(comment_count),
-        };
-      });
+      const articlesWithCommentCount = rows.map(
+        ({ comment_count, ...rest }) => {
+          return {
+            ...rest,
+            comment_count: Number(comment_count),
+          };
+        }
+      );
 
-      return { articles: filteredArticles };
+      return { articles: articlesWithCommentCount };
     });
 };
 

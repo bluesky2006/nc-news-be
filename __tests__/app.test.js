@@ -95,6 +95,42 @@ describe("GET /api/articles", () => {
         expect(body.articles[0].hasOwnProperty("body")).toBe(false);
       });
   });
+  test("200: Returns correct object when passed non-default sort_buy and order queries", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        for (let i = 0; i < body.articles.length - 1; i++) {
+          expect(body.articles[i].title <= body.articles[i + 1].title).toBe(
+            true
+          );
+        }
+      });
+  });
+  test("400: Returns 'Invalid queries' if passed invalid queries", () => {
+    return request(app)
+      .get("/api/articles?sort_by=bad&order=bad")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid queries");
+      });
+  });
+  test("400: Returns 'Invalid sort_by query'' if passed invalide queries", () => {
+    return request(app)
+      .get("/api/articles?sort_by=bad&order=asc")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid sort_by query");
+      });
+  });
+  test("400: Returns 'Invalid order query' if passed invalide queries", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title&order=bad")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid order query");
+      });
+  });
 });
 
 describe("GET /api/users", () => {
