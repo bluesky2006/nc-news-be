@@ -3,11 +3,16 @@ const {
   selectArticleByArticleId,
   updateArticleVoteByArticleId,
 } = require("../models/articles.models.js");
+const checkTopicExists = require("../utils.js");
 
 const getAllArticles = (request, response, next) => {
   const { sort_by, order, topic } = request.query;
+
   selectAllArticles(sort_by, order, topic)
-    .then((articles) => response.status(200).send(articles))
+    .then((articles) => {
+      console.log(articles);
+      response.status(200).send(articles);
+    })
     .catch(next);
 };
 

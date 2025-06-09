@@ -97,9 +97,10 @@ describe("GET /api/articles", () => {
   });
   test("200: Returns correct object when passed non-default sort_buy and order queries", () => {
     return request(app)
-      .get("/api/articles?sort_by=title&order=asc&topic=football")
+      .get("/api/articles?sort_by=title&order=asc&topic=mitch")
       .expect(200)
       .then(({ body }) => {
+        // console.log(body);
         for (let i = 0; i < body.articles.length - 1; i++) {
           expect(body.articles[i].title <= body.articles[i + 1].title).toBe(
             true
@@ -112,7 +113,7 @@ describe("GET /api/articles", () => {
       .get("/api/articles?sort_by=bad&order=asc")
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Invalid query");
+        expect(body.msg).toBe("Invalid sort_by query");
       });
   });
   test("400: Returns 'Invalid order query' if passed invalid order query", () => {
@@ -120,17 +121,17 @@ describe("GET /api/articles", () => {
       .get("/api/articles?sort_by=title&order=bad")
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Invalid query");
+        expect(body.msg).toBe("Invalid order query");
       });
   });
-  // test("400: Returns 'Invalid topic query' if passed invalid topic query", () => {
-  //   return request(app)
-  //     .get("/api/articles?sort_by=title&order=asc&topic=bad")
-  //     .expect(404)
-  //     .then(({ body }) => {
-  //       expect(body.msg).toBe("Topic not found");
-  //     });
-  // });
+  test("GET /api/articles?topic=nonexistent-topic - responds with 404 if topic doesn't exist", () => {
+    return request(app)
+      .get("/api/articles?topic=nonexistent-topic")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Topic not found");
+      });
+  });
 });
 
 describe("GET /api/users", () => {
@@ -177,6 +178,7 @@ describe("GET /api/articles/:article_id", () => {
         expect(typeof body.article[0].created_at).toBe("string");
         expect(typeof body.article[0].votes).toBe("number");
         expect(typeof body.article[0].article_img_url).toBe("string");
+        expect(typeof body.article[0].comment_count).toBe("number");
       });
   });
   test("400: Responds with an error if the article_id is not a number", () => {
