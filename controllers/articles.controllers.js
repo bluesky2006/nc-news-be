@@ -10,7 +10,6 @@ const getAllArticles = (request, response, next) => {
 
   selectAllArticles(sort_by, order, topic)
     .then((articles) => {
-      console.log(articles);
       response.status(200).send(articles);
     })
     .catch(next);
@@ -27,7 +26,7 @@ const patchArticleVoteByArticleId = (request, response, next) => {
   const { article_id } = request.params;
   const { inc_votes } = request.body;
   updateArticleVoteByArticleId(article_id, inc_votes)
-    .then((article) => response.status(202).send(article))
+    .then((article) => response.status(200).send(article))
     .catch(next);
 };
 

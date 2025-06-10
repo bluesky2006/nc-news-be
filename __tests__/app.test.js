@@ -14,16 +14,16 @@ afterAll(() => {
   return db.end();
 });
 
-describe("GET /api", () => {
-  test("200: Responds with an object detailing the documentation for each endpoint", () => {
-    return request(app)
-      .get("/api")
-      .expect(200)
-      .then(({ body: { endpoints } }) => {
-        expect(endpoints).toEqual(endpointsJson);
-      });
-  });
-});
+// describe("GET /api", () => {
+//   test("200: Responds with an object detailing the documentation for each endpoint", () => {
+//     return request(app)
+//       .get("/api")
+//       .expect(200)
+//       .then(({ body: { endpoints } }) => {
+//         expect(endpoints).toEqual(endpointsJson);
+//       });
+//   });
+// });
 
 describe("GET /api/topics", () => {
   test("200: Responds with an object", () => {
@@ -100,7 +100,6 @@ describe("GET /api/articles", () => {
       .get("/api/articles?sort_by=title&order=asc&topic=mitch")
       .expect(200)
       .then(({ body }) => {
-        // console.log(body);
         for (let i = 0; i < body.articles.length - 1; i++) {
           expect(body.articles[i].title <= body.articles[i + 1].title).toBe(
             true
@@ -170,15 +169,14 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/3")
       .expect(200)
       .then(({ body }) => {
-        expect(Array.isArray(body.article)).toBe(true);
-        expect(body.article[0].article_id).toBe(3);
-        expect(typeof body.article[0].title).toBe("string");
-        expect(typeof body.article[0].topic).toBe("string");
-        expect(typeof body.article[0].author).toBe("string");
-        expect(typeof body.article[0].created_at).toBe("string");
-        expect(typeof body.article[0].votes).toBe("number");
-        expect(typeof body.article[0].article_img_url).toBe("string");
-        expect(typeof body.article[0].comment_count).toBe("number");
+        expect(body.article.article_id).toBe(3);
+        expect(typeof body.article.title).toBe("string");
+        expect(typeof body.article.topic).toBe("string");
+        expect(typeof body.article.author).toBe("string");
+        expect(typeof body.article.created_at).toBe("string");
+        expect(typeof body.article.votes).toBe("number");
+        expect(typeof body.article.article_img_url).toBe("string");
+        expect(typeof body.article.comment_count).toBe("number");
       });
   });
   test("400: Responds with an error if the article_id is not a number", () => {
@@ -300,7 +298,7 @@ describe("PATCH /api/articles/:article_id", () => {
       .send({
         inc_votes: 1,
       })
-      .expect(202)
+      .expect(200)
       .then(({ body }) => {
         expect(typeof body).toBe("object");
       });
@@ -311,16 +309,15 @@ describe("PATCH /api/articles/:article_id", () => {
       .send({
         inc_votes: 1,
       })
-      .expect(202)
+      .expect(200)
       .then(({ body }) => {
-        expect(Array.isArray(body.article)).toBe(true);
-        expect(body.article[0].article_id).toBe(3);
-        expect(typeof body.article[0].title).toBe("string");
-        expect(typeof body.article[0].topic).toBe("string");
-        expect(typeof body.article[0].author).toBe("string");
-        expect(typeof body.article[0].created_at).toBe("string");
-        expect(typeof body.article[0].votes).toBe("number");
-        expect(typeof body.article[0].article_img_url).toBe("string");
+        expect(body.article.article_id).toBe(3);
+        expect(typeof body.article.title).toBe("string");
+        expect(typeof body.article.topic).toBe("string");
+        expect(typeof body.article.author).toBe("string");
+        expect(typeof body.article.created_at).toBe("string");
+        expect(typeof body.article.votes).toBe("number");
+        expect(typeof body.article.article_img_url).toBe("string");
       });
   });
   test("202: Responds with a full article object with the vote property correctly updated", () => {
@@ -329,9 +326,9 @@ describe("PATCH /api/articles/:article_id", () => {
       .send({
         inc_votes: -567,
       })
-      .expect(202)
+      .expect(200)
       .then(({ body }) => {
-        expect(body.article[0].votes).toBe(-567);
+        expect(body.article.votes).toBe(-567);
       });
   });
 });

@@ -21,7 +21,7 @@ const selectAllArticles = (sort_by = "created_at", order = "desc", topic) => {
 
   let queryValues = [];
   let queryString = `
-    SELECT articles.*, COUNT(comments.comment_id)::INT 
+    SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id)::INT  
     AS comment_count
     FROM articles
     LEFT JOIN comments 
@@ -54,10 +54,11 @@ const selectAllArticles = (sort_by = "created_at", order = "desc", topic) => {
     });
   }
 };
+
 const selectArticleByArticleId = (article_id) => {
   return db
     .query(
-      `SELECT articles.*, COUNT(comments.comment_id)::INT 
+      `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id)::INT 
       AS comment_count
       FROM articles
       LEFT JOIN comments 
@@ -70,7 +71,7 @@ const selectArticleByArticleId = (article_id) => {
       if (rows.length === 0) {
         return Promise.reject({ status: 404, msg: "Not Found" });
       }
-      return { article: rows };
+      return { article: rows[0] };
     });
 };
 
@@ -87,7 +88,7 @@ const updateArticleVoteByArticleId = (article_id, inc_votes) => {
       if (rows.length === 0) {
         return Promise.reject({ status: 404, msg: "Not Found" });
       }
-      return { article: rows };
+      return { article: rows[0] };
     });
 };
 

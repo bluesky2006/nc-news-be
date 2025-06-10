@@ -5,7 +5,7 @@ const {
   handleCustomErrors,
   handleServerError,
 } = require("./middleware/error-handler");
-const { getRoot, getEndpoints } = require("./controllers/api.controllers");
+const { getRoot } = require("./controllers/api.controllers");
 const {
   getAllArticles,
   getArticleByArticleId,
@@ -20,12 +20,13 @@ const { getAllTopics } = require("./controllers/topics.controllers");
 const { getAllUsers } = require("./controllers/users.controllers");
 
 app.use(express.json());
-
+``;
 // Respond with friendly greeting on /
 app.get("/", getRoot);
 
 // Respond with list of endpoints on /api
-app.get("/api", getEndpoints);
+// app.get("/api", getEndpoints);
+app.use("/api", express.static("public"));
 
 // Respond with list of topics on /api/topics
 app.get("/api/topics", getAllTopics);
