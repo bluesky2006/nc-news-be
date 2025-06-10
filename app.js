@@ -20,9 +20,9 @@ const { getAllTopics } = require("./controllers/topics.controllers");
 const { getAllUsers } = require("./controllers/users.controllers");
 
 app.use(express.json());
-``;
+
 // Respond with friendly greeting on /
-app.get("/", getRoot);
+app.get("/", express.static("public"));
 
 // Respond with list of endpoints on /api
 // app.get("/api", getEndpoints);

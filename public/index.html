@@ -11,20 +11,33 @@
       href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
       rel="stylesheet"
     />
-    <title>nc news API</title>
+    <title>Northcoders News API</title>
   </head>
   <body>
+    <header class="container">
+      <h1>Northcoders News API</h1>
+    </header>
     <nav>
       <ul>
         <li><a href="#resources">Resources</a></li>
-        <li><a href="#routes">Routes</a></li>
-        <li><a href="#section3">Section 3</a></li>
-        <li><a href="#section4">Section 4</a></li>
+        <li class="dropdown">
+          <a href="#routes" class="dropbtn">Routes</a>
+          <div class="dropdown-content">
+            <a href="#route1">GET /api</a>
+            <a href="#route2">GET /api/topics</a>
+            <a href="#route3">GET /api/articles</a>
+            <a href="#route4">GET /api/users</a>
+            <a href="#route5">GET /api/articles/1</a>
+            <a href="#route6">GET /api/articles/1/comments</a>
+            <a href="#route7">POST /api/articles/1/comments</a>
+            <a href="#route8">PATCH /api/articles/1</a>
+            <a href="#route9">DELETE /api/comments/1</a>
+          </div>
+        </li>
+        <li><a href="#code-examples">Code examples</a></li>
+        <li><a href="#json-responses">JSON responses</a></li>
       </ul>
     </nav>
-    <header>
-      <h1>nc news API</h1>
-    </header>
 
     <main>
       <section id="resources">
@@ -54,139 +67,94 @@
           <div class="circle"></div>
           <h2>Routes</h2>
         </div>
-        <p>You can use http to make requests on the following endpoints</p>
-        <button type="button" class="collapsible">GET /api</button>
-        <div class="content">
-          <pre>
+        <p>You can use HTTP to make requests on the following endpoints:</p>
+
+        <h3 id="route1">GET <a href="/api">/api</a></h3>
+        <p>Serves a webpage of all the available endpoints of the API.</p>
+        <h3 id="route2">GET <a href="/api/topics">/api/topics</a></h3>
+
+        <p>Serves an array of all topics.</p>
+        <pre>
 {
-  "description": "Serves a JSON representation of all the available endpoints of the API.",
-  "status": "200",
-  "queries": [],
-  "requestBody": null,
-  "exampleResponse": {
-    "endpoints": {
-      "GET /api": {
-        "description": "Serves a JSON representation of all the available endpoints of the API."
-      }
-    }
-  }
-}
-          </pre>
-        </div>
-        <button type="button" class="collapsible">GET /api/topics</button>
-        <div class="content">
-          <pre>
-{
-  "description": "Serves an array of all topics.",
-  "status": "200",
-  "queries": [],
-  "requestBody": null,
-  "exampleResponse": {
-    "topics": {
+  "topics": [
+    {
+      "slug": "coding",
+      "description": "Code is love, code is life"
+    },
+    {
       "slug": "football",
-      "description": "Footie!"
+      "description": "FOOTIE!"
+    },
+    {
+      "slug": "cooking",
+      "description": "Hey good looking, what you got cooking?"
     }
-  }
+  ]
 }
-          </pre>
-        </div>
-        <button type="button" class="collapsible">GET /api/articles</button>
-        <div class="content">
-          <pre>
+</pre
+        >
+        <h3 id="route3">GET <a href="/api/articles">/api/articles</a></h3>
+        <p>Serves an array of all articles.</p>
+        <pre>
 {
-  "description": "Serves an array of all articles.",
-  "status": "200",
-  "queries": [
+  "articles": [
     {
-      "name": "sort_by",
-      "type": "string",
-      "allowedValues": ["author", "title", "topic", "created_at", "votes", "comment_count"],
-      "default": "created_at"
-    },
-    {
-      "name": "order",
-      "type": "string",
-      "allowedValues": ["asc", "desc"],
-      "default": "desc"
-    },
-    {
-      "name": "topic",
-      "type": "string",
-      "example": "football"
-    }
-  ],
-  "requestBody": null,
-  "exampleResponse": {
-    "articles": {
-      "article_id": 34,
-      "title": "The Notorious MSG’s Unlikely Formula For Success",
-      "topic": "cooking",
       "author": "grumpy19",
+      "title": "The Notorious MSG’s Unlikely Formula For Success",
+      "article_id": 34,
+      "topic": "cooking",
       "created_at": "2020-11-22T11:13:00.000Z",
       "votes": 0,
       "article_img_url": "https://images.pexels.com/photos/2403392/pexels-photo-2403392.jpeg?w=700&h=700",
       "comment_count": 11
     }
-  }
+  ]
 }
-          </pre>
-        </div>
-        <button type="button" class="collapsible">GET /api/users</button>
-        <div class="content">
-          <pre>
+</pre
+        >
+
+        <h3 id="route4">GET <a href="/api/users">/api/users</a></h3>
+        <p>Serves an array of all users.</p>
+        <pre>
 {
-  "description": "Serves an array of all users.",
-  "status": "TBC",
-  "queries": [],
-  "requestBody": null,
-  "exampleResponse": {
-    "users": {
+  "users": [
+    {
       "username": "tickle122",
       "name": "Tom Tickle",
       "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
     }
+  ]
+}
+</pre
+        >
+        <h3 id="route5">GET <a href="/api/articles/1">/api/articles/1</a></h3>
+
+        <p>Serves an article corresponding to a given article_id number.</p>
+        <pre>
+{
+  "article": {
+    "author": "jessjelly",
+    "title": "Running a Node App",
+    "article_id": 1,
+    "topic": "coding",
+    "created_at": "2020-11-07T06:03:00.000Z",
+    "votes": 1,
+    "article_img_url": "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700",
+    "comment_count": 8
   }
 }
-          </pre>
-        </div>
-        <button type="button" class="collapsible">
-          GET /api/articles/:article_id
-        </button>
-        <div class="content">
-          <pre>
+</pre
+        >
+
+        <h3 id="route6">
+          GET
+          <a href="/api/articles/1/comments">/api/articles/1/comments</a>
+        </h3>
+        <p>Serves all comments corresponding to a given article_id number.</p>
+        <pre>
 {
-  "description": "Serves an article corresponding to a given article_id number.",
-  "status": "TBC",
-  "queries": [],
-  "requestBody": null,
-  "exampleResponse": {
-    "article": {
-      "article_id": 1,
-      "title": "Running a Node App",
-      "topic": "coding",
-      "author": "jessjelly",
-      "body": "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.",
-      "created_at": "2020-11-07T06:03:00.000Z",
-      "votes": 1,
-      "article_img_url": "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700",
-      "comment_count": 8
-    }
-  }
-}
-          </pre>
-        </div>
-        <button type="button" class="collapsible">
-          GET /api/articles/:article_id/comments
-        </button>
-        <div class="content">
-          <pre>
-{
-  "description": "Serves all comments corresponding to a given article_id number.",
-  "status": "TBC",
-  "queries": [],
-  "requestBody": null,
-  "exampleResponse": {
-    "comments": {
+  "comments": [
+    {
       "comment_id": 89,
       "votes": 2,
       "created_at": "2020-10-24T06:08:00.000Z",
@@ -194,80 +162,75 @@
       "body": "Esse et expedita harum non. Voluptatibus commodi voluptatem. Minima velit suscipit numquam ea. Id vitae debitis aut incidunt odio quo quam possimus ipsum.",
       "article_id": 1
     }
-  }
+  ]
 }
-          </pre>
-        </div>
-        <button type="button" class="collapsible">
-          POST /api/articles/:article_id/comments
-        </button>
-        <div class="content">
-          <pre>
-{
-  "description": "Returns newly posted comment for a given article_id number.",
-  "status": "TBC",
-  "queries": [],
-  "requestBody": {
-    "author": "tickle122",
-    "body": "this is a test"
-  },
-  "exampleResponse": {
-    "comment": {
-      "comment_id": 314,
-      "article_id": 3,
-      "body": "this is a test",
-      "votes": 0,
-      "author": "tickle122",
-      "created_at": "2025-06-05T11:28:43.842Z"
-    }
-  }
-}
-          </pre>
-        </div>
-        <button type="button" class="collapsible">
-          PATCH /api/articles/:article_id
-        </button>
-        <div class="content">
-          <pre>
-{
-  "description": "Returns an updated article with vote count updated.",
-  "status": "TBC",
-  "queries": [],
-  "requestBody": {
-    "inc_votes": 1
-  },
-  "exampleResponse": {
-    "article": {
-      "article_id": 1,
-      "title": "Running a Node App",
-      "topic": "coding",
-      "author": "jessjelly",
-      "body": "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.",
-      "created_at": "2020-11-07T06:03:00.000Z",
-      "votes": 1,
-      "article_img_url": "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700"
-    }
-  }
-}
-          </pre>
-        </div>
-        <button type="button" class="collapsible">
-          DELETE /api/comments/:comment_id
-        </button>
-        <div class="content">
-          <pre>
-{
-  "description": "Deletes a comment by a given comment_id",
-  "status": "TBC",
-  "queries": [],
-  "requestBody": null,
-  "exampleResponse": null
-}
-          </pre>
-        </div>
-      </section>
+</pre
+        >
 
-      <section id="section3">
+        <h3 id="route7">POST /api/articles/1/comments</h3>
+        <p>Returns object of posted comment for a given article_id number.</p>
+        <h4>Request</h4>
+        <pre>
+{
+  "username": "string",
+  "body": "string"
+}
+</pre
+        >
+        <h4>Response</h4>
+        <pre>
+{
+  "comment": {
+    "comment_id": 314,
+    "article_id": 3,
+    "body": "this is a test",
+    "votes": 0,
+    "author": "tickle122",
+    "created_at": "2025-06-05T11:28:43.842Z"
+  }
+}
+</pre
+        >
+
+        <h3 id="route8">PATCH /api/articles/1</h3>
+        <h4>Request</h4>
+        <pre>
+{
+  "inc_votes": number
+}
+</pre
+        >
+        <h4>Response</h4>
+        <p>
+          Returns an updated article for a given article_id with its vote count
+          updated.
+        </p>
+        <pre>
+{
+  "article": {
+    "article_id": 1,
+    "title": "Running a Node App",
+    "topic": "coding",
+    "author": "jessjelly",
+    "body": "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.",
+    "created_at": "2020-11-07T06:03:00.000Z",
+    "votes": 1,
+    "article_img_url": "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700"
+  }
+}
+</pre
+        >
+        <h3 id="route9">DELETE /api/comments/1</h3>
+        <p>Deletes a comment by a given comment_id</p>
+        <pre>
+{
+  "status": "204",
+  "body": null
+}
+</pre
+        >
+      </section>
+      <section id="code-examples">
         <div class="circle-container">
           <div class="circle"></div>
           <h2>Code examples</h2>
@@ -277,10 +240,11 @@
 fetch("http://localhost:9090/api/articles")
   .then((response) => response.json())
   .then((json) => console.log(json));
-        </pre>
+</pre
+        >
       </section>
 
-      <section id="section4">
+      <section id="json-responses">
         <div class="circle-container">
           <div class="circle"></div>
           <h2>JSON responses</h2>
