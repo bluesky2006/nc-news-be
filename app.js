@@ -22,7 +22,7 @@ const { getAllUsers } = require("./controllers/users.controllers");
 app.use(express.json());
 
 // Respond with friendly greeting on /
-app.get("/", express.static("public"));
+app.get("/", getRoot);
 
 // Respond with list of endpoints on /api
 // app.get("/api", getEndpoints);
