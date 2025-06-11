@@ -13,8 +13,8 @@ const getCommentsByArticleId = (request, response, next) => {
 
 const postCommentByArticleId = (request, response, next) => {
   const { article_id } = request.params;
-  const { author, body } = request.body;
-  insertCommentByArticleId(article_id, author, body)
+  const { username, body } = request.body;
+  insertCommentByArticleId(article_id, username, body)
     .then((comment) => response.status(201).send(comment))
     .catch(next);
 };

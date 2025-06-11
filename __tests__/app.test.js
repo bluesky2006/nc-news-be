@@ -264,7 +264,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       .post("/api/articles/3/comments")
       .expect(201)
       .send({
-        author: "rogersop",
+        username: "rogersop",
         body: "this is a test",
       })
       .then(({ body }) => {
@@ -281,7 +281,7 @@ describe("POST /api/articles/:article_id/comments", () => {
     return request(app)
       .post("/api/articles/3/comments")
       .send({
-        author: "bluesky2006",
+        username: "bluesky2006",
         body: "this is a test",
       })
       .expect(400)
