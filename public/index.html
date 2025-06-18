@@ -68,13 +68,15 @@
           <h2>Routes</h2>
         </div>
         <p>You can use HTTP to make requests on the following endpoints:</p>
+        <div class="route-container">
+          <h3 id="route1">GET <a href="/api">/api</a></h3>
+          <p>Serves a webpage of all the available endpoints of the API.</p>
+        </div>
+        <div class="route-container">
+          <h3 id="route2">GET <a href="/api/topics">/api/topics</a></h3>
 
-        <h3 id="route1">GET <a href="/api">/api</a></h3>
-        <p>Serves a webpage of all the available endpoints of the API.</p>
-        <h3 id="route2">GET <a href="/api/topics">/api/topics</a></h3>
-
-        <p>Serves an array of all topics.</p>
-        <pre>
+          <p>Serves an array of all topics.</p>
+          <pre>
 {
   "topics": [
     {
@@ -92,10 +94,12 @@
   ]
 }
 </pre
-        >
-        <h3 id="route3">GET <a href="/api/articles">/api/articles</a></h3>
-        <p>Serves an array of all articles.</p>
-        <pre>
+          >
+        </div>
+        <div class="route-container">
+          <h3 id="route3">GET <a href="/api/articles">/api/articles</a></h3>
+          <p>Serves an array of all articles.</p>
+          <pre>
 {
   "articles": [
     {
@@ -111,11 +115,12 @@
   ]
 }
 </pre
-        >
-
-        <h3 id="route4">GET <a href="/api/users">/api/users</a></h3>
-        <p>Serves an array of all users.</p>
-        <pre>
+          >
+        </div>
+        <div class="route-container">
+          <h3 id="route4">GET <a href="/api/users">/api/users</a></h3>
+          <p>Serves an array of all users.</p>
+          <pre>
 {
   "users": [
     {
@@ -126,11 +131,13 @@
   ]
 }
 </pre
-        >
-        <h3 id="route5">GET <a href="/api/articles/1">/api/articles/1</a></h3>
+          >
+        </div>
+        <div class="route-container">
+          <h3 id="route5">GET <a href="/api/articles/1">/api/articles/1</a></h3>
 
-        <p>Serves an article corresponding to a given article_id number.</p>
-        <pre>
+          <p>Serves an article corresponding to a given article_id number.</p>
+          <pre>
 {
   "article": {
     "author": "jessjelly",
@@ -144,17 +151,18 @@
   }
 }
 </pre
-        >
-
-        <h3 id="route6">
-          GET
-          <a href="/api/articles/1/comments">/api/articles/1/comments</a>
-        </h3>
-        <p>
-          Serves an array of comments corresponding to a given article_id
-          number.
-        </p>
-        <pre>
+          >
+        </div>
+        <div class="route-container">
+          <h3 id="route6">
+            GET
+            <a href="/api/articles/1/comments">/api/articles/1/comments</a>
+          </h3>
+          <p>
+            Serves an array of comments corresponding to a given article_id
+            number.
+          </p>
+          <pre>
 {
   "comments": [
     {
@@ -168,22 +176,24 @@
   ]
 }
 </pre
-        >
-
-        <h3 id="route7">POST /api/articles/1/comments</h3>
-        <p>
-          Returns posted comment for a given article_id number by a known user.
-        </p>
-        <h4>Example request</h4>
-        <pre>
+          >
+        </div>
+        <div class="route-container">
+          <h3 id="route7">POST /api/articles/1/comments</h3>
+          <p>
+            Returns posted comment for a given article_id number by a known
+            user.
+          </p>
+          <h4>Example request</h4>
+          <pre>
 {
   "username": "tickle122",
   "body": "Test body"
 }
 </pre
-        >
-        <h4>Response</h4>
-        <pre>
+          >
+          <h4>Response</h4>
+          <pre>
 {
   "comment": {
     "comment_id": 314,
@@ -195,21 +205,23 @@
   }
 }
 </pre
-        >
-
-        <h3 id="route8">PATCH /api/articles/1</h3>
-        <p>
-          Returns an article for a given article_id with its vote count updated.
-        </p>
-        <h4>Example request</h4>
-        <pre>
+          >
+        </div>
+        <div class="route-container">
+          <h3 id="route8">PATCH /api/articles/1</h3>
+          <p>
+            Returns an article for a given article_id with its vote count
+            updated.
+          </p>
+          <h4>Example request</h4>
+          <pre>
 {
   "inc_votes": 5
 }
 </pre
-        >
-        <h4>Response</h4>
-        <pre>
+          >
+          <h4>Response</h4>
+          <pre>
 {
   "article": {
     "article_id": 1,
@@ -223,14 +235,17 @@
   }
 }
 </pre
-        >
-        <h3 id="route9">DELETE /api/comments/1</h3>
-        <p>Deletes a comment by a given comment_id.</p>
-        <h4>Response</h4>
-        <pre>
+          >
+        </div>
+        <div class="route-container">
+          <h3 id="route9">DELETE /api/comments/1</h3>
+          <p>Deletes a comment by a given comment_id.</p>
+          <h4>Response</h4>
+          <pre>
 Empty (Status 204).
 </pre
-        >
+          >
+        </div>
       </section>
       <section id="code-examples">
         <div class="circle-container">
