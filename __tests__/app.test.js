@@ -228,6 +228,14 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(body.comments).toBeSortedBy("created_at", { descending: true });
       });
   });
+  test("200: Responds with an empty array if the article exists but has not comments", () => {
+    return request(app)
+      .get("/api/articles/11/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual([]);
+      });
+  });
   test("400: Responds with an error if the article_id is not a number", () => {
     return request(app)
       .get("/api/articles/notanum/comments")
@@ -238,10 +246,10 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
   test("404: Responds with an error if the article_id does not exist", () => {
     return request(app)
-      .get("/api/articles/99/comments")
+      .get("/api/articles/1000/comments")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("Not Found");
+        expect(body.msg).toBe("Article not found");
       });
   });
 });

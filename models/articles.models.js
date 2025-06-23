@@ -1,5 +1,5 @@
 const db = require("../db/connection");
-const checkTopicExists = require("../utils");
+const { checkTopicExists } = require("../utils");
 
 const selectAllArticles = (sort_by = "created_at", order = "desc", topic) => {
   const validSortByQueries = [
