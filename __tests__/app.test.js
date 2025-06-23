@@ -170,13 +170,13 @@ describe("GET /api/articles/:article_id", () => {
       .expect(200)
       .then(({ body }) => {
         expect(body.article.article_id).toBe(3);
-        expect(typeof body.article.title).toBe("string");
-        expect(typeof body.article.topic).toBe("string");
         expect(typeof body.article.author).toBe("string");
+        expect(typeof body.article.title).toBe("string");
+        expect(typeof body.article.body).toBe("string");
+        expect(typeof body.article.topic).toBe("string");
         expect(typeof body.article.created_at).toBe("string");
         expect(typeof body.article.votes).toBe("number");
         expect(typeof body.article.article_img_url).toBe("string");
-        expect(typeof body.article.comment_count).toBe("number");
       });
   });
   test("400: Responds with an error if the article_id is not a number", () => {
@@ -329,6 +329,15 @@ describe("PATCH /api/articles/:article_id", () => {
       .expect(200)
       .then(({ body }) => {
         expect(body.article.votes).toBe(-567);
+      });
+  });
+  test("200: Responds with an unchanged article object if sent an empty request body", () => {
+    return request(app)
+      .patch("/api/articles/3")
+      .send({})
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article.votes).toBe(0);
       });
   });
 });

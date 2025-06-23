@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const {
   handlePostgresErrors,
@@ -18,6 +19,8 @@ const {
 } = require("./controllers/comments.controllers");
 const { getAllTopics } = require("./controllers/topics.controllers");
 const { getAllUsers } = require("./controllers/users.controllers");
+
+app.use(cors());
 
 app.use(express.json());
 
