@@ -5,8 +5,6 @@ const {
 } = require("../models/articles.models.js");
 const db = require("../db/connection");
 
-// const checkTopicExists = require("../utils.js");
-
 function getAllArticles(request, response, next) {
   const { sort_by, order, topic } = request.query;
 
