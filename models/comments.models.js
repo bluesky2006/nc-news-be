@@ -1,7 +1,11 @@
 const db = require("../db/connection");
-const { checkCommentsExistByArticleId } = require("../utils");
+const {
+  checkCommentsExistByArticleId,
+  checkArticleExists,
+  checkUserExists,
+} = require("../utils");
 
-const selectCommentsByArticleId = (article_id) => {
+function selectCommentsByArticleId(article_id) {
   return db
     .query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
     .then(({ rows }) => {
@@ -24,22 +28,39 @@ const selectCommentsByArticleId = (article_id) => {
         )
         .then(({ rows }) => ({ comments: rows }));
     });
-};
+}
 
-const insertCommentByArticleId = (article_id, username, body) => {
-  return db
-    .query(
-      `INSERT INTO comments (article_id, author, body)
-      VALUES ($1, $2, $3)
-      RETURNING *;`,
-      [article_id, username, body]
-    )
-    .then(({ rows }) => {
-      return { comment: rows[0] };
+function insertCommentByArticleId(article_id, username, body) {
+  if (
+    typeof username !== "string" ||
+    typeof body !== "string" ||
+    !username.trim() ||
+    !body.trim()
+  ) {
+    return Promise.reject({
+      status: 400,
+      msg: "Posts must include a username and body",
     });
-};
+  }
 
-const dBdeleteCommentByCommentId = (comment_id) => {
+  return checkArticleExists(article_id)
+    .then(() => {
+      return checkUserExists(username);
+    })
+    .then(() => {
+      return db.query(
+        `INSERT INTO comments (article_id, author, body)
+         VALUES ($1, $2, $3)
+         RETURNING *;`,
+        [article_id, username, body]
+      );
+    })
+    .then((insertResult) => {
+      return { comment: insertResult.rows[0] };
+    });
+}
+
+function dBdeleteCommentByCommentId(comment_id) {
   return db
     .query(`DELETE FROM comments WHERE comment_id = $1 RETURNING *;`, [
       comment_id,
@@ -50,7 +71,7 @@ const dBdeleteCommentByCommentId = (comment_id) => {
       }
       return { comments: rows };
     });
-};
+}
 
 module.exports = {
   selectCommentsByArticleId,
