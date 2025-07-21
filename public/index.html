@@ -69,8 +69,7 @@
         <div class="route-container">
           <h3 id="route1">GET <a href="/api">/api</a></h3>
           <p>Serves a webpage of all the available endpoints of the API.</p>
-          <pre>
-{
+          <pre>{
   "endpoints": {
     "GET /api": {
       "description": "Serves a JSON representation of all the available endpoints of the API.",
@@ -86,15 +85,12 @@
       }
     }
   }
-}
-          </pre>
+}</pre>
         </div>
         <div class="route-container">
           <h3 id="route2">GET <a href="/api/topics">/api/topics</a></h3>
-
           <p>Serves an array of all topics.</p>
-          <pre>
-{
+          <pre>{
   "topics": [
     {
       "slug": "coding",
@@ -109,15 +105,12 @@
       "description": "Hey good looking, what you got cooking?"
     }
   ]
-}
-</pre
-          >
+}</pre>
         </div>
         <div class="route-container">
           <h3 id="route3">GET <a href="/api/articles">/api/articles</a></h3>
           <p>Serves an array of all articles.</p>
-          <pre>
-{
+          <pre>{
   "articles": [
     {
       "author": "grumpy19",
@@ -130,15 +123,12 @@
       "comment_count": 11
     }
   ]
-}
-</pre
-          >
+}</pre>
         </div>
         <div class="route-container">
           <h3 id="route4">GET <a href="/api/users">/api/users</a></h3>
           <p>Serves an array of all users.</p>
-          <pre>
-{
+          <pre>{
   "users": [
     {
       "username": "tickle122",
@@ -146,16 +136,12 @@
       "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
     }
   ]
-}
-</pre
-          >
+}</pre>
         </div>
         <div class="route-container">
           <h3 id="route5">GET <a href="/api/articles/1">/api/articles/1</a></h3>
-
           <p>Serves an article corresponding to a given article_id number.</p>
-          <pre>
-{
+          <pre>{
   "article": {
     "author": "jessjelly",
     "title": "Running a Node App",
@@ -165,23 +151,16 @@
     "created_at": "2020-11-07T06:03:00.000Z",
     "votes": 0,
     "article_img_url": "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700",
-		"comment_count": 8
+    "comment_count": 8
   }
-}
-</pre
-          >
+}</pre>
         </div>
         <div class="route-container">
           <h3 id="route6">
-            GET
-            <a href="/api/articles/1/comments">/api/articles/1/comments</a>
+            GET <a href="/api/articles/1/comments">/api/articles/1/comments</a>
           </h3>
-          <p>
-            Serves an array of comments corresponding to a given article_id
-            number.
-          </p>
-          <pre>
-{
+          <p>Serves an array of comments corresponding to a given article_id number.</p>
+          <pre>{
   "comments": [
     {
       "comment_id": 89,
@@ -192,77 +171,54 @@
       "article_id": 1
     }
   ]
-}
-</pre
-          >
+}</pre>
         </div>
         <div class="route-container">
           <h3 id="route7">POST /api/articles/1/comments</h3>
-          <p>
-            Returns posted comment for a given article_id number by a known
-            user.
-          </p>
+          <p>Returns posted comment for a given article_id number by a known user.</p>
           <h4>Example request</h4>
-          <pre>
-{
+          <pre>{
   "username": "tickle122",
   "body": "Test body"
-}
-</pre
-          >
+}</pre>
           <h4>Response</h4>
-          <pre>
-{
-	"comment": {
-		"comment_id": 301,
-		"article_id": 1,
-		"body": "Test body",
-		"votes": 0,
-		"author": "tickle122",
-		"created_at": "2025-07-21T20:04:00.825Z"
-	}
-}
-</pre
-          >
+          <pre>{
+  "comment": {
+    "comment_id": 301,
+    "article_id": 1,
+    "body": "Test body",
+    "votes": 0,
+    "author": "tickle122",
+    "created_at": "2025-07-21T20:04:00.825Z"
+  }
+}</pre>
         </div>
         <div class="route-container">
           <h3 id="route8">PATCH /api/articles/1</h3>
-          <p>
-            Returns an article for a given article_id with its vote count
-            updated.
-          </p>
+          <p>Returns an article for a given article_id with its vote count updated.</p>
           <h4>Example request</h4>
-          <pre>
-{
+          <pre>{
   "inc_votes": 5
-}
-</pre
-          >
+}</pre>
           <h4>Response</h4>
-          <pre>
-{
-	"article": {
-		"article_id": 1,
-		"title": "Running a Node App",
-		"topic": "coding",
-		"author": "jessjelly",
-		"body": "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.",
-		"created_at": "2020-11-07T06:03:00.000Z",
-		"votes": 5,
-		"article_img_url": "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700"
-	}
-}
-</pre
-          >
+          <pre>{
+  "article": {
+    "article_id": 1,
+    "title": "Running a Node App",
+    "topic": "coding",
+    "author": "jessjelly",
+    "body": "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.",
+    "created_at": "2020-11-07T06:03:00.000Z",
+    "votes": 5,
+    "article_img_url": "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700"
+  }
+}</pre>
         </div>
         <div class="route-container">
           <h3 id="route9">DELETE /api/comments/1</h3>
           <p>Deletes a comment by a given comment_id.</p>
           <h4>Response</h4>
-          <pre>
-Empty (Status 204).
-</pre
-          >
+          <pre>Empty (Status 204).</pre>
         </div>
       </section>
 
