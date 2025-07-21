@@ -1,6 +1,6 @@
 const db = require("./db/connection");
 
-const checkTopicExists = (topic) => {
+function checkTopicExists(topic) {
   return db
     .query(`SELECT * FROM topics WHERE slug = $1;`, [topic])
     .then((result) => {
@@ -9,9 +9,9 @@ const checkTopicExists = (topic) => {
       }
       return;
     });
-};
+}
 
-const checkCommentsExistByArticleId = (article_id) => {
+function checkCommentsExistByArticleId(article_id) {
   return db
     .query(
       `SELECT EXISTS (
@@ -24,6 +24,34 @@ const checkCommentsExistByArticleId = (article_id) => {
     .then((result) => {
       return result.rows[0].exists;
     });
-};
+}
 
-module.exports = { checkTopicExists, checkCommentsExistByArticleId };
+function checkArticleExists(article_id) {
+  return db
+    .query(`SELECT * FROM articles WHERE article_id = $1;`, [article_id])
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "Article not found" });
+      }
+    });
+}
+
+function checkUserExists(username) {
+  return db
+    .query(`SELECT * FROM users WHERE username = $1;`, [username])
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "User not found",
+        });
+      }
+    });
+}
+
+module.exports = {
+  checkTopicExists,
+  checkCommentsExistByArticleId,
+  checkArticleExists,
+  checkUserExists,
+};
