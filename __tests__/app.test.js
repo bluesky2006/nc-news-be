@@ -259,7 +259,7 @@ describe("POST /api/articles/:article_id/comments", () => {
     return request(app)
       .post("/api/articles/3/comments")
       .send({
-        author: "rogersop",
+        username: "rogersop",
         body: "this is a test",
       })
       .expect(201)
@@ -292,9 +292,9 @@ describe("POST /api/articles/:article_id/comments", () => {
         username: "bluesky2006",
         body: "this is a test",
       })
-      .expect(400)
+      .expect(404)
       .then(({ body }) => {
-        expect(body).toEqual({ msg: "Bad Request" });
+        expect(body).toEqual({ msg: "User not found" });
       });
   });
 });
