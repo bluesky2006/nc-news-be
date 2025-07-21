@@ -50,7 +50,7 @@ pre {
 
 /* 3. Layout */
 header {
-  background-color: #e9793b;
+  background-color: #1c8246;
   padding: 1rem;
   height: 8rem;
 }
@@ -70,7 +70,7 @@ header {
 .circle {
   width: 1rem;
   height: 1rem;
-  background-color: #e9793b;
+  background-color: #1c8246;
   border-radius: 50%;
   position: absolute;
   top: 50%;
@@ -115,7 +115,7 @@ li a,
 
 li a:hover,
 .dropdown:hover .dropbtn {
-  background-color: #e9793b;
+  background-color: #1c8246;
 }
 
 li.dropdown {
