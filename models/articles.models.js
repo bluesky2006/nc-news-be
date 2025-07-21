@@ -1,7 +1,7 @@
 const db = require("../db/connection");
 const { checkTopicExists } = require("../utils");
 
-const selectAllArticles = (sort_by = "created_at", order = "desc", topic) => {
+function selectAllArticles(sort_by = "created_at", order = "desc", topic) {
   const validSortByQueries = [
     "author",
     "title",
@@ -15,6 +15,7 @@ const selectAllArticles = (sort_by = "created_at", order = "desc", topic) => {
   if (!validSortByQueries.includes(sort_by)) {
     return Promise.reject({ status: 400, msg: "Invalid sort_by query" });
   }
+
   if (!validOrderQueries.includes(order)) {
     return Promise.reject({ status: 400, msg: "Invalid order query" });
   }
@@ -53,9 +54,9 @@ const selectAllArticles = (sort_by = "created_at", order = "desc", topic) => {
       return { articles: articles };
     });
   }
-};
+}
 
-const selectArticleByArticleId = (article_id) => {
+function selectArticleByArticleId(article_id) {
   return db
     .query(
       `SELECT articles.author, articles.title, articles.article_id, articles.body, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id)::INT AS comment_count
@@ -72,9 +73,9 @@ const selectArticleByArticleId = (article_id) => {
       }
       return { article: rows[0] };
     });
-};
+}
 
-const updateArticleVoteByArticleId = (article_id, inc_votes) => {
+function updateArticleVoteByArticleId(article_id, inc_votes) {
   return db
     .query(
       `UPDATE articles
@@ -89,7 +90,7 @@ const updateArticleVoteByArticleId = (article_id, inc_votes) => {
       }
       return { article: rows[0] };
     });
-};
+}
 
 module.exports = {
   selectAllArticles,
