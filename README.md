@@ -66,7 +66,7 @@ This will create your local `development` and `test` databases.
 ### 5. Seed the development database
 
 ```bash
-npm run seed
+npm run seed-dev
 ```
 
 Populates the `nc_news` database with test data.
