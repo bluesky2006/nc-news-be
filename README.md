@@ -1,43 +1,45 @@
-# NC News API
+# northcoder news API
 
-Hosted version: [https://nc-news-3jz4.onrender.com](https://nc-news-3jz4.onrender.com)
-
-GitHub Repo: [https://github.com/bluesky2006/nc-news-be](https://github.com/bluesky2006/nc-news-be)
-
+**Hosted API**: [https://nc-news-3jz4.onrender.com](https://nc-news-3jz4.onrender.com)  
+**GitHub repo**: [https://github.com/bluesky2006/nc-news-be](https://github.com/bluesky2006/nc-news-be)
 
 ## Summary
 
-The NC News API is a RESTful backend project built using Node.js, Express, and PostgreSQL. It exposes a variety of endpoints to access and manipulate a Reddit-style news aggregation service. Users can browse articles, vote on them, add comments, and explore topics.
+The nc news API is a RESTful backend project built using **Node.js**, **Express**, and **PostgreSQL**. It exposes endpoints for a Reddit-style news aggregation service, allowing users to:
 
-This project was built as part of the Northcoders bootcamp and demonstrates key backend skills including:
+- Browse and filter articles
+- Vote on articles
+- Post and delete comments
+- Explore topics
 
-- Database schema design and SQL querying
-- Express routing and layered MVC architecture
-- Comprehensive error handling and data validation
-- Integration testing using Jest and Supertest
-- Deployment to a live hosting environment (Render)
+This project was built during the **Northcoders JavaScript Software Development Bootcamp** and demonstrates:
 
+- SQL querying and database schema design
+- Express routing and MVC architecture
+- Data validation and custom error handling
+- Integration testing with Jest and Supertest
+- Deployment via Render
 
-## Getting Started Locally
+## Getting started locally
 
-These instructions will get the project running on your local machine for development and testing purposes.
+These instructions will get the project running on your machine for development and testing.
 
-### 1. Clone the Repository
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/bluesky2006/nc-news-be.git
 cd nc-news-be
 ```
 
-### 2. Install Dependencies
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Create Environment Configuration
+### 3. Create environment configuration
 
-You need two `.env` files in the root of the project to configure the database connections:
+Add two environment files at the root of the project:
 
 #### `.env.development`
 ```
@@ -49,77 +51,65 @@ PGDATABASE=nc_news
 PGDATABASE=nc_news_test
 ```
 
-> These files tell the app which database to connect to depending on the environment (`development` or `test`).
+> These files define which PostgreSQL database to connect to depending on the environment.
 
+### 4. Set up the local databases
 
-### 4. Set Up the Local Databases
-
-Make sure PostgreSQL is installed and running on your machine.
-
-Then run:
+Ensure PostgreSQL is installed and running, then run:
 
 ```bash
 npm run setup-dbs
 ```
 
-This creates the development and test databases using the setup script.
+This will create your local `development` and `test` databases.
 
-
-### 5. Seed the Development Database
-
-To populate your local development database with data:
+### 5. Seed the development database
 
 ```bash
 npm run seed
 ```
 
+Populates the `nc_news` database with test data.
 
-### 6. Start the Server
+### 6. Start the server
 
 ```bash
 npm start
 ```
 
-By default, the server runs on [http://localhost:9090](http://localhost:9090). You can now make requests to the API using tools like Postman or curl.
+The server will be available at:  
+[http://localhost:9090](http://localhost:9090)
 
-
-### 7. Run the Test Suite
-
-The project includes integration tests written with Jest and Supertest. To run the tests:
+### 7. Run the test suite
 
 ```bash
 npm test
 ```
 
-This will run the full test suite against the test database.
+This executes the full test suite against the test database using Jest and Supertest.
 
+## 📚 API documentation
 
-## API Documentation
-
-Once running, visit:
+Once the server is running, visit:
 
 ```
 http://localhost:9090/api
 ```
 
-You’ll see a JSON object describing all available endpoints, their accepted methods, required parameters, and example responses.
+This will return a JSON object describing all available endpoints, accepted methods, parameters, and example responses.
 
+## 📋 Requirements
 
-## Requirements
+- **Node.js:** v20.11.0 or later (tested with v23.11.0)
+- **PostgreSQL:** v14+
 
-To run this project, you’ll need:
+All other dependencies will be installed via `npm install`.
 
-- **Node.js:** v20.11.0 or higher (tested with v23.11.0)
-- **PostgreSQL:** v14 or higher
-
-All other dependencies can be installed via `npm install`.
-
-
-## Contact
-
-Feel free to fork this repo, open issues, or reach out with feedback via GitHub. This project forms part of my portfolio – if you're checking this out from my CV, thanks for stopping by!
-
-## Database diagram
-
+## 🗺️ Database diagram
 
 ![Database diagram](db_diagram.png)
+
+## 📬 Contact
+
+Feel free to fork this repo, submit issues or reach out with suggestions.  
+This project is part of my portfolio – if you're reading this via my CV, thanks for stopping by!
